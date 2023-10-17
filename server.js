@@ -1,9 +1,19 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const articleRoute = require("./routes/article");
+require("dotenv").config();
 const app = express();
+
+mongoose.connect(process.env.MONGO_CONNECTION, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 //Set view engine
 app.set("view engine", "ejs");
+
+app.use(express.urlencoded({ extended: false }));
+
 app.use("/articles", articleRoute);
 
 app.get("/", (req, res) => {
@@ -18,4 +28,4 @@ app.get("/", (req, res) => {
 });
 
 const port = process.env.PORT || 5000;
-app.listen(5000, console.log(`Server listening ${port}....`));
+app.listen(port, console.log(`Server listening ${port}....`));
